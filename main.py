@@ -7,10 +7,10 @@ import pandas
 import os
 
 
-def get_wine_age():
-    wine_start_age = 1920
+def get_winery_age():
+    winery_start_age = 1920
     current_year = datetime.datetime.now().year
-    return current_year - wine_start_age
+    return current_year - winery_start_age
 
 
 def get_format_age(wine_age):
@@ -64,12 +64,12 @@ if __name__ == '__main__':
     template = env.get_template('template.html')
 
     categorized_wines = get_wines_and_category(data_path)
-    wines_age = get_wine_age()
+    winery_age = get_winery_age()
 
     rendered_page = template.render(
         wines=categorized_wines,
-        wine_age=wines_age,
-        format_age=get_format_age(wines_age),
+        wine_age=winery_age,
+        format_age=get_format_age(winery_age),
         special_offer_promotion=special_offer_promotion
     )
 
