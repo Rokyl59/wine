@@ -30,12 +30,10 @@ pip install -r reqirements.txt
 python3 main.py
 ```
 
-- Создайте файл `.env` и укажите путь к файлу и сам файл. Пример:
+- Создайте файл `.env` и укажите в нем
 
-```python
-WINE_DATA_PATH=wine_data.xlsx
-SPECIAL_OFFER_PROMOTION=Выгодное предложение
-```
+* `WINE_DATA_PATH`: путь к файлу Excel с данными о винах. Пример: `WINE_DATA_PATH=wine_data.xlsx`
+* `SPECIAL_OFFER_PROMOTION`: текст специального предложения, который будет отображаться на сайте. Пример: `SPECIAL_OFFER_PROMOTION=Выгодное предложение`
 
 - Перейдите на сайт по адресу [http://127.0.0.1:8000](http://127.0.0.1:8000).
 

@@ -28,8 +28,7 @@ def get_format_age(wine_age):
         return "лет"
 
 
-def get_wines_and_category():
-    data_path = os.getenv('WINE_DATA_PATH', 'wine.xlsx')
+def get_wines_and_category(data_path):
     excel_data_df = pandas.read_excel(
         data_path,
         sheet_name='Лист1',
@@ -52,6 +51,7 @@ def get_wines_and_category():
 
 if __name__ == '__main__':
     load_dotenv()
+    data_path = os.getenv('WINE_DATA_PATH', 'wine.xlsx')
     special_offer_promotion = os.getenv(
         'SPECIAL_OFFER_PROMOTION',
         'Выгодное предложение'
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     template = env.get_template('template.html')
 
-    categorized_wines = get_wines_and_category()
+    categorized_wines = get_wines_and_category(data_path)
     wines_age = get_wine_age()
 
     rendered_page = template.render(
