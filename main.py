@@ -1,9 +1,10 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from dotenv import load_dotenv
 from collections import defaultdict
 import datetime
 import pandas
-import json
+import os
 
 
 def get_wine_age():
@@ -27,9 +28,10 @@ def get_format_age(wine_age):
         return "лет"
 
 
-def get_json_wines_and_category():
+def get_wines_and_category():
+    data_path = os.getenv('WINE_DATA_PATH', 'wine.xlsx')
     excel_data_df = pandas.read_excel(
-        'wine3.xlsx',
+        data_path,
         sheet_name='Лист1',
         usecols=[
             'Категория',
@@ -40,8 +42,7 @@ def get_json_wines_and_category():
             'Акция'
         ])
 
-    json_wine = excel_data_df.to_json(orient='records')
-    products = json.loads(json_wine)
+    products = excel_data_df.to_dict(orient='records')
     grouped_products = defaultdict(list)
     for product in products:
         category = product['Категория']
@@ -50,6 +51,11 @@ def get_json_wines_and_category():
 
 
 if __name__ == '__main__':
+    load_dotenv()
+    special_offer_promotion = os.getenv(
+        'SPECIAL_OFFER_PROMOTION',
+        'Выгодное предложение'
+    )
     env = Environment(
         loader=FileSystemLoader('.'),
         autoescape=select_autoescape(['html', 'xml'])
@@ -57,12 +63,14 @@ if __name__ == '__main__':
 
     template = env.get_template('template.html')
 
-    wines_in_json = get_json_wines_and_category()
+    categorized_wines = get_wines_and_category()
+    wines_age = get_wine_age()
 
     rendered_page = template.render(
-        wines=wines_in_json,
-        wine_age=get_wine_age(),
-        format_age=get_format_age(get_wine_age())
+        wines=categorized_wines,
+        wine_age=wines_age,
+        format_age=get_format_age(wines_age),
+        special_offer_promotion=special_offer_promotion
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
